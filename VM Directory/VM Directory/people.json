@@ -1,0 +1,52 @@
+[
+    {
+    "createdAt": "2022-01-24T17:02:23.729Z",
+    "firstName": "Maggie",
+    "avatar": "https://randomuser.me/api/portraits/women/21.jpg",
+    "lastName": "Brekke",
+    "email": "Crystel.Nicolas61@hotmail.com",
+    "jobtitle": "Future Functionality Strategist",
+    "favouriteColor": "pink",
+    "id": "1"
+    },
+    {
+    "createdAt": "2022-01-24T22:47:43.227Z",
+    "firstName": "Armando",
+    "avatar": "https://randomuser.me/api/portraits/women/23.jpg",
+    "lastName": "Weber",
+    "email": "Milton.Wisoky@gmail.com",
+    "jobtitle": "Principal Accounts Developer",
+    "favouriteColor": "sky blue",
+    "id": "2"
+    },
+    {
+    "createdAt": "2022-01-25T02:27:00.553Z",
+    "firstName": "Ceasar",
+    "avatar": "https://randomuser.me/api/portraits/women/4.jpg",
+    "lastName": "Turner",
+    "email": "Hettie31@gmail.com",
+    "jobtitle": "Future Interactions Supervisor",
+    "favouriteColor": "cyan",
+    "id": "3"
+    },
+    {
+    "createdAt": "2022-01-25T15:13:11.387Z",
+    "firstName": "Gunnar",
+    "avatar": "https://randomuser.me/api/portraits/women/IsaryAmairani_128.jpg",
+    "lastName": "Gibson",
+    "email": "Paolo.Hudson@yahoo.com",
+    "jobtitle": "Senior Directives Officer",
+    "favouriteColor": "indigo",
+    "id": "4"
+    },
+    {
+    "createdAt": "2022-01-25T05:51:28.621Z",
+    "firstName": "Valerie",
+    "avatar": "https://randomuser.me/api/portraits/women/5.jpg",
+    "lastName": "Graham",
+    "email": "Jewell79@gmail.com",
+    "jobtitle": "Lead Brand Liaison",
+    "favouriteColor": "orchid",
+    "id": "5"
+    }
+]

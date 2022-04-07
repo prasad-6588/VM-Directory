@@ -7,19 +7,17 @@
 
 import Foundation
 
-protocol ListResponseDelegate {
-    func receivedResponse(for segmentType: SegmentState)
-    func receivedRequestError(for segmentType: SegmentState,
-                              errorMessage: String)
-}
-
 class ListViewModel {
-    var viewModelDelegate: ListResponseDelegate?
+    let networkManager: NetworkManagerProtocol
+    
     var peopleList = [Person]()
     var roomsList = [Room]()
     
-    public init(viewModelDelegate: ListResponseDelegate) {
-        self.viewModelDelegate = viewModelDelegate
+    var responseReceived: ((SegmentState)->Void)?
+    var showError: ((SegmentState, String)->Void)?
+    
+    init(networkManager: NetworkManagerProtocol = NetworkManager()) {
+        self.networkManager = networkManager
     }
 }
 
@@ -36,15 +34,14 @@ extension ListViewModel {
 
 extension ListViewModel {
     public func getPeopleList() {
-        let networkManager = NetworkManager(requestUrl: getPeopleAPIUrl())
-        networkManager.fetchData() { (result : Result<[Person],Error>) in
+        networkManager.fetchData(requestType: "people",
+                                 requestUrl: getPeopleAPIUrl()) { [weak self] (result : Result<[Person],Error>) in
             switch result {
             case .success(let model):
-                self.peopleList = model
-                self.viewModelDelegate?.receivedResponse(for: .people)
+                self?.peopleList = model
+                self?.responseReceived?(.people)
             case .failure(let error):
-                self.viewModelDelegate?.receivedRequestError(for: .people,
-                                                                errorMessage: error.localizedDescription)
+                self?.showError?(.people, error.localizedDescription)
             }
         }
     }
@@ -54,15 +51,14 @@ extension ListViewModel {
     }
     
     public func getRoomsList() {
-        let networkManager = NetworkManager(requestUrl: getRoomsAPIUrl())
-        networkManager.fetchData() { (result : Result<[Room],Error>) in
+        networkManager.fetchData(requestType: "rooms",
+                                 requestUrl: getRoomsAPIUrl()) { [weak self] (result : Result<[Room],Error>) in
             switch result {
             case .success(let model):
-                self.roomsList = model
-                self.viewModelDelegate?.receivedResponse(for: .rooms)
+                self?.roomsList = model
+                self?.responseReceived?(.rooms)
             case .failure(let error):
-                self.viewModelDelegate?.receivedRequestError(for: .rooms,
-                                                                errorMessage: error.localizedDescription)
+                self?.showError?(.rooms, error.localizedDescription)
             }
         }
     }

@@ -7,22 +7,26 @@
 
 import Foundation
 
-struct NetworkManager {
+protocol NetworkManagerProtocol {
+    func fetchData<T: Decodable>(requestType: String,
+                                 requestUrl: String,
+                                 completion: @escaping (Result<T,Error>) -> Void)
+}
+
+final class NetworkManager: NetworkManagerProtocol {
     
-    let requestUrl: String
+    public init() {}
     
-    public init(requestUrl: String) {
-        self.requestUrl = requestUrl
-    }
-    
-    func fetchData<T: Decodable>(completion: @escaping (Result<T,Error>) -> Void) {
+    func fetchData<T: Decodable>(requestType: String,
+                                 requestUrl: String,
+                                 completion: @escaping (Result<T,Error>) -> Void) {
         guard let url = URL(string: requestUrl) else {
             return
         }
         
         URLSession.shared.dataTask(with: url) { (data, _, error) in
             if let error = error {
-                completion(.failure(error));
+                completion(.failure(error))
                 return
             }
             completion(Result { try JSONDecoder().decode(T.self, from: data!) })

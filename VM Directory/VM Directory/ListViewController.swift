@@ -30,8 +30,41 @@ class ListViewController: UIViewController {
         tableView.register(UINib(nibName: "RoomTableViewCell", bundle: nil), forCellReuseIdentifier: "roomCell")
         
         showLoadingIndicator(message: LoaderMessages.people.rawValue)
-        listViewModel = ListViewModel(viewModelDelegate: self)
+        
+        setupViewModel()
+    }
+    
+    private func setupViewModel() {
+        listViewModel = ListViewModel()
+        
+        listViewModel.responseReceived = { [weak self] (segmentState) in
+            DispatchQueue.main.async {
+                self?.hideLoadingIndicator()
+                self?.reloadTableView()
+            }
+        }
+        
+        listViewModel.showError = {[weak self] (segmentState, error) in
+            DispatchQueue.main.async {
+                self?.hideLoadingIndicator()
+            }
+            if segmentState == .people {
+                print("Unable to fetch people: \(error)")
+            }
+            else {
+                print("Unable to fetch rooms: \(error)")
+            }
+        }
+        
         listViewModel.getPeopleList()
+    }
+    
+    private func reloadTableView() {
+        DispatchQueue.main.async {
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.reloadData()
+        }
     }
     
     @IBAction func segmentValueChanged(_ sender: UISegmentedControl) {
@@ -43,38 +76,6 @@ class ListViewController: UIViewController {
         else {
             showLoadingIndicator(message: LoaderMessages.rooms.rawValue)
             listViewModel.getRoomsList()
-        }
-    }
-}
-
-extension ListViewController: ListResponseDelegate {
-    
-    func receivedResponse(for segmentType: SegmentState) {
-        hideLoadingIndicator()
-        reloadTableView()
-        if segmentType == SegmentState.people {
-            
-        }
-        else {
-            
-        }
-    }
-    
-    func receivedRequestError(for segmentType: SegmentState, errorMessage: String) {
-        hideLoadingIndicator()
-        if segmentType == SegmentState.people {
-            
-        }
-        else {
-            
-        }
-    }
-    
-    private func reloadTableView() {
-        DispatchQueue.main.async {
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.reloadData()
         }
     }
 }
